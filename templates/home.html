@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href =  "static/home.css">
+    <title>AI Image Colorizer</title>
+    
+</head>
+<body>
+    <section class="showcase">
+        <header>
+            <h1>
+                <span class = "logo">AI Colourization</span><br />
+                <span class="bold">Image Colourization using GANs</span>
+                <!-- <img class = "csi" src = "csi logo.png" alt = ""> -->
+            </h1>
+            <div class = "toggle"></div>
+        </header>
+        <div>
+            <h1 id="header">{{ msg }}</h1>
+        </div>
+
+        <div class="row">
+            <div class="column" >
+                <form method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    {{ form.file }}
+                <input type="submit" class="form-control" id="inputGroupFile02">
+                <!-- <a href = "#">UPLOAD</a> -->
+                </form>
+            </div>
+              <!-- <div class="column" style="background-color: #bbb">Column</div> -->
+            
+            <div class="column2" >
+                <h2>All about GAN's</h2>
+            </div>
+
+        </div>
+        <footer>
+            <p>Computer Society of India,VIT Pune</p>
+
+            <ul class = "social">
+
+            </ul>
+        </footer>
+        <video src="static/video.mp4" muted loop autoplay></video>
+        
+        
+    </section>
+    
+</body>
+</html>
