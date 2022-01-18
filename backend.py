@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hackproofgan_csi2021'
 
-pred_model = load_model('model_final.h5')
+pred_model = load_model('generator_20.h5')
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -94,7 +94,7 @@ def upload():
             return redirect(url_for('render_predict'))
 
         else:
-            return render_template("home.html", msg='This file format is not valid. Only jpeg, jpg and png', form=[])
+            return render_template("home.html", msg='This file format is not valid. Only jpeg, jpg and png is supported', form=[])
 
     return render_template('home.html', form=form, msg='')
 
@@ -103,13 +103,10 @@ def upload():
 def render_predict():
     img_path = 'static/uploads/' + session['image']
     output_path = 'static/uploads/output.png'
-
     prediction(img_path, pred_model, output_path)
-
-    print(img_path)
 
     return render_template('predict.html', image_path=img_path, color_img=output_path)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
