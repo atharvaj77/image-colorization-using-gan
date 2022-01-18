@@ -94,7 +94,8 @@ def upload():
             return redirect(url_for('render_predict'))
 
         else:
-            return render_template("home.html", msg='This file format is not valid. Only jpeg, jpg and png is supported', form=[])
+            return render_template("home.html",
+                                   msg='This file format is not valid. Only jpeg, jpg and png is supported', form=[])
 
     return render_template('home.html', form=form, msg='')
 
