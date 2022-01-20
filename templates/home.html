@@ -17,12 +17,13 @@
         </h1>
         <div class="toggle"></div>
     </header>
-    <div>
-        <h1 id="header">{{ msg }}</h1>
-    </div>
 
     <div class="row">
         <div class="column">
+            {% if msg %}
+            <h3 class="header">{{ msg }}</h3>
+            {% endif %}
+
             <form method="post" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 {{ form.file }}
@@ -35,7 +36,7 @@
         <div class="column2">
             <h2>About this project</h2>
             <P>1. The job of this project is to colorize Greyscale images. For this
-                the image will be converted to greyscale and resized to 224*224 dimensions in order to
+                the image will be converted to greyscale and resized to 256*256 dimensions in order to
                 feed in to the neural network
             </P>
             <P>2. For this project we have used a Deep Convolutional Generative Adversarial Networks(DCGAN)

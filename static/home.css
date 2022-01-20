@@ -7,6 +7,14 @@
     font-family: "Squada One";
 }
 
+.header{
+    z-index: 50;
+    color: darkred;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+
 .showcase {
     position: absolute;
     right: 0;

@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 from flask import Flask
-from flask import render_template, session, url_for, redirect
+from flask import render_template, session, url_for, redirect, send_from_directory
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from tensorflow.keras.models import load_model
@@ -63,7 +63,6 @@ def prediction(grey_img_path, model, out_img_path):
 
 
 UPLOAD_FOLDER = './upload'
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -94,10 +93,10 @@ def upload():
             return redirect(url_for('render_predict'))
 
         else:
-            return render_template("home.html",
-                                   msg='This file format is not valid. Only jpeg, jpg and png is supported', form=[])
+            return render_template('home.html', form=form, msg='File format not supported.Only jpeg, jpg and png are '
+                                                               'supported')
 
-    return render_template('home.html', form=form, msg='')
+    return render_template('home.html', form=form)
 
 
 @app.route('/predict', methods=['GET', 'POST'])
