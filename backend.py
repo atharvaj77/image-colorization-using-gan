@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 from flask import Flask
-from flask import render_template, session, url_for, redirect, send_from_directory
+from flask import render_template, session, url_for, redirect
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from tensorflow.keras.models import load_model
@@ -18,37 +18,28 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
 # https://docs.opencv.org/3.4/de/d25/imgproc_color_conversions.html
-
-def prediction(grey_img_path, model, out_img_path):
+def prediction(grey_img_path, model, out_img_path, greyscale_path):
     img_arr = cv2.imread(grey_img_path)
     resized = cv2.resize(img_arr, (256, 256))
-    img_lab = cv2.cvtColor(resized, cv2.COLOR_BGR2LAB)
-    lab_channels = cv2.split(img_lab)
+    img_gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
 
-    # Normalizing Channels
-    # l -> -1 to 1
-    # ab -> -1 to 1
-    normalized_l = lab_channels[0] / 127.5 - 1.
-    normalized_ab = (cv2.merge((lab_channels[1], lab_channels[2])) - 128.) / 127.
-
-    normalized_l = np.expand_dims(normalized_l, -1)
-    normalized_l = np.float32(normalized_l)
-    normalized_ab = np.float32(normalized_ab)
-
-    final = np.expand_dims(normalized_l, 0)
+    img_gray = (img_gray - 127.5) / 127.5
+    img_gray = np.expand_dims(img_gray, -1)
+    final = np.expand_dims(img_gray, 0)
 
     predicted_ab = model.predict(final)
 
     squeezed = np.squeeze(predicted_ab)
 
-    predicted_lab = cv2.merge((normalized_l, squeezed))
+    img_gray = np.float32(img_gray)
+    predicted_lab = cv2.merge((img_gray, squeezed))
 
-    pred_L = (predicted_lab[:, :, 0] + 1.) * 50.
+    pred_l = (predicted_lab[:, :, 0] + 1.) * 50.
     pred_ab = (predicted_lab[:, :, 1:] * 127.5)
-    pred_L = np.float32(pred_L)
+    pred_l = np.float32(pred_l)
     pred_ab = np.float32(pred_ab)
 
-    pred_lab = cv2.merge((pred_L, pred_ab))
+    pred_lab = cv2.merge((pred_l, pred_ab))
     pred_lab = np.float32(pred_lab)
 
     pred_rgb = cv2.cvtColor(pred_lab, cv2.COLOR_LAB2BGR)
@@ -56,7 +47,8 @@ def prediction(grey_img_path, model, out_img_path):
     pred_rgb_final = pred_rgb * 255
     final_pred_rgb = pred_rgb_final.astype(int)
 
-    cv2.imwrite(grey_img_path, lab_channels[0])
+    final_gray_out = (img_gray * 127.5) + 127.5
+    cv2.imwrite(greyscale_path, final_gray_out)
     cv2.imwrite(out_img_path, final_pred_rgb)
 
     print('Done!')
@@ -84,17 +76,21 @@ def upload():
     form = UploadForm()
 
     if form.validate_on_submit():
-        if allowed_file(form.file.data.filename):
-            filename = secure_filename(form.file.data.filename)
-            form.file.data.save('static/uploads/' + filename)
+        if form.file.data:
+            if allowed_file(form.file.data.filename):
+                filename = secure_filename(form.file.data.filename)
+                form.file.data.save('static/uploads/' + filename)
 
-            session['image'] = form.file.data.filename
+                session['image'] = form.file.data.filename
 
-            return redirect(url_for('render_predict'))
+                return redirect(url_for('render_predict'))
 
+            else:
+                return render_template('home.html', form=form, msg='File format not supported.Only jpeg, jpg and png '
+                                                                   'are '
+                                                                   'supported')
         else:
-            return render_template('home.html', form=form, msg='File format not supported.Only jpeg, jpg and png are '
-                                                               'supported')
+            return render_template('home.html', form=form, msg='Please select a file!')
 
     return render_template('home.html', form=form)
 
@@ -102,10 +98,11 @@ def upload():
 @app.route('/predict', methods=['GET', 'POST'])
 def render_predict():
     img_path = 'static/uploads/' + session['image']
+    gray_path = 'static/uploads/gray.png'
     output_path = 'static/uploads/output.png'
-    prediction(img_path, pred_model, output_path)
+    prediction(img_path, pred_model, output_path, gray_path)
 
-    return render_template('predict.html', image_path=img_path, color_img=output_path)
+    return render_template('predict.html', image_path=gray_path, color_img=output_path)
 
 
 if __name__ == '__main__':
