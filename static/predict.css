@@ -91,21 +91,20 @@ footer p {
     background-color: #282d32;
 }
 
-.pred-block{
+.pred-block {
     display: flex;
     flex-direction: column;
     padding-left: 100px;
     padding-right: 100px;
 }
 
-.pred-block h1{
+.pred-block h1 {
     padding: 20px;
 }
 
-.pred-img{
+.pred-img {
     align-self: center;
 }
-
 
 
 .pred-title {
@@ -169,13 +168,12 @@ footer p {
     z-index: 200;
 }
 
-.pred-content{
+.pred-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
 }
-
 
 
 .column a {
@@ -194,16 +192,15 @@ footer p {
     top: 115px;
 }
 
-.error-message{
+.error-message {
     color: darkred;
     font-size: 30px;
 }
 
-.error-heading{
+.error-heading {
     color: red;
     font-size: 50px;
 }
-
 
 
 .footer social {
