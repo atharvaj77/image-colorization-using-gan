@@ -18,23 +18,34 @@
         <div class="toggle"></div>
     </header>
 
-
-
-
-    <div class="pred-content">
-    <div class="column">
-        <div class="row">
-            <div class="pred-block">
-                <h1 class="pred-title">Your Greyscale Input</h1>
-                <img src="{{ image_path }}" alt="Greyscale Image" class="pred-img"/>
-            </div>
-            <div class="pred-block">
-                <h1 class="pred-title">Generated Coloured Output</h1>
-                <img src="{{ color_img }}" alt="Colored Image" class="pred-img"/>
+    {% if success == True %}
+        <div class="pred-content">
+            <div class="column">
+                <div class="row">
+                    <div class="pred-block">
+                        <h1 class="pred-title">Your Greyscale Input</h1>
+                        <img src="{{ image_path }}" alt="Greyscale Image" class="pred-img"/>
+                    </div>
+                    <div class="pred-block">
+                        <h1 class="pred-title">Generated Coloured Output</h1>
+                        <img src="{{ color_img }}" alt="Colored Image" class="pred-img"/>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    </div>
+
+
+    {% else %}
+        <div class="error-block">
+            <h2 class="error-heading">OOPS! There was an error in processing your image. Please retry with another
+                image.</h2>
+            <h2 class="error-message">{{ response }}</h2>
+        </div>
+
+
+    {% endif %}
+
+
 
     <footer>
         <p>Computer Society of India,VIT Pune</p>

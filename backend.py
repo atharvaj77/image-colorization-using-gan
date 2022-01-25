@@ -102,12 +102,16 @@ def upload():
 
 @app.route('/predict', methods=['GET', 'POST'])
 def render_predict():
-    img_path = 'static/uploads/' + session['image']
-    gray_path = 'static/uploads/gray.png'
-    output_path = 'static/uploads/output.png'
-    prediction(img_path, pred_model, output_path, gray_path)
+    try:
+        img_path = 'static/uploads/' + session['image']
+        gray_path = 'static/uploads/gray.png'
+        output_path = 'static/uploads/output.png'
+        prediction(img_path, pred_model, output_path, gray_path)
 
-    return render_template('predict.html', image_path=gray_path, color_img=output_path)
+        return render_template('predict.html', image_path=gray_path, color_img=output_path, success=True)
+
+    except Exception as e:
+        return render_template('predict.html', response=e)
 
 
 if __name__ == '__main__':

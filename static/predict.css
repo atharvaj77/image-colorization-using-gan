@@ -194,6 +194,18 @@ footer p {
     top: 115px;
 }
 
+.error-message{
+    color: darkred;
+    font-size: 30px;
+}
+
+.error-heading{
+    color: red;
+    font-size: 50px;
+}
+
+
+
 .footer social {
     z-index: 10;
     display: flex;
