@@ -12,6 +12,7 @@
     color: darkred;
     padding-top: 20px;
     padding-bottom: 20px;
+    font-size: 30px;
 }
 
 
@@ -98,11 +99,13 @@ footer p {
 
 .column2 {
     max-width: 50%;
+    z-index: 100;
 }
 
 .column2 p {
     font-size: 20px;
     padding: 10px;
+    color: gray;
 }
 
 
@@ -240,9 +243,9 @@ footer p {
     color: white;
     font-size: 20px;
     border-radius: 20%;
+    padding: 10px 20px 10px 20px;
 }
 
 .submit-buttonText {
     padding: 10px;
 }
-
