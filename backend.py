@@ -72,6 +72,10 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload():
+    # Creating uploads folder if it doesn't exist
+    if not os.path.exists('static/uploads'):
+        os.makedirs('static/uploads')
+
     # Clearing the uploads directory
     if os.listdir('static/uploads'):
         for f in os.listdir('static/uploads'):
@@ -82,6 +86,7 @@ def upload():
     if form.validate_on_submit():
         # Checking if form data is NoneType
         if form.file.data:
+            # Checking if the extension of the file is in ALLOWED_EXTENSIONS
             if allowed_file(form.file.data.filename):
                 filename = secure_filename(form.file.data.filename)
                 form.file.data.save('static/uploads/' + filename)
@@ -91,7 +96,7 @@ def upload():
                 return redirect(url_for('render_predict'))
 
             else:
-                return render_template('home.html', form=form, msg='File format not supported.Only jpeg, jpg and png '
+                return render_template('home.html', form=form, msg='File format not supported. Only jpeg, jpg and png '
                                                                    'are '
                                                                    'supported')
         else:
