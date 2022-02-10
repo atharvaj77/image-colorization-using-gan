@@ -203,6 +203,12 @@ footer p {
     padding-bottom: 30px;
 }
 
+#logo-img {
+    height: 85px;
+    width: 150px;
+}
+
+
 .error-block {
     margin-left: 30px;
     margin-right: 30px;
