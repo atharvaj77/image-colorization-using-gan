@@ -11950,8 +11950,6 @@ body {
 }
 
 
-
-
 .text-white-75 {
     color: rgba(255, 255, 255, 0.75) !important;
 }
@@ -12077,12 +12075,10 @@ header.masthead h1, header.masthead .h1 {
     font-size: 2.25rem;
 }
 
-#logo-img{
+#logo-img {
     height: 85px;
     width: 150px;
 }
-
-
 
 
 @media (min-width: 992px) {
