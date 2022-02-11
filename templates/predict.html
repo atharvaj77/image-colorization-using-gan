@@ -65,18 +65,23 @@
             <div class="col-lg-8 text-center">
                 <h2 class="text-white mt-0">About this project</h2>
                 <hr class="divider divider-light"/>
-                <p class="text-white-75 mb-4">1. The job of this project is to colorize Greyscale images. For this the
-                    image will be converted to greyscale and resized to 256*256 dimensions in order to feed in to the
-                    neural network</p>
-                <p class="text-white-75 mb-4">2. For this project we have used a Deep Convolutional Generative
-                    Adversarial Networks(DCGAN) and Patch discriminator</p>
-                <p class="text-white-75 mb-4">3. This neural nework is trained on around 50K images from COCO unlabeled
-                    2017 dataset</p>
-                <p class="text-white-75 mb-4">4. Try to feed/upload more general scenes with sky and trees for better
-                    results</p>
+                <ul>
+                    <li><p class="text-black mb-4" style="text-align: justify">The job of this project is to colorize
+                        Greyscale images. For this the
+                        image will be converted to greyscale and resized to 256*256 dimensions in order to feed in to
+                        the
+                        neural network</p></li>
+                    <li><p class="text-black mb-4" style="text-align: justify">For this project we have used a Deep
+                        Convolutional Generative
+                        Adversarial Networks(DCGAN) and Patch discriminator</p></li>
+                    <li><p class="text-black mb-4" style="text-align: justify">This neural nework is trained on around
+                        50K images from COCO unlabeled
+                        2017 dataset</p></li>
+                    <li><p class="text-black mb-4" style="text-align: justify">Try to feed/upload more general scenes
+                        with sky and trees for better
+                        results</p></li>
+                </ul>
 
-
-                <!-- <a class="btn btn-light btn-xl" href="#services">Get Started!</a> -->
             </div>
         </div>
     </div>
@@ -86,13 +91,13 @@
 {% if success == True %}
     <div id="portfolio">
         <div class="container my-3">
-            <div class="column" style="float: left; width: 50%; padding: 10px;">
-                <h2>Input image</h2>
-                <img style="width: 75%;" src="{{ image_path }}" alt="image1">
+            <div class="column" style="float: left; width: 50%; padding: 50px 10px 150px 10px;">
+                <h2 style="padding-bottom: 10px; text-align: center">Input image</h2>
+                <img style="width: 100%;" src="{{ image_path }}" alt="Greyscale Image">
             </div>
-            <div class="column" style="float: left; width: 50%; padding: 10px;">
-                <h2>Output image</h2>
-                <img style="width: 75%;" src="{{ color_img }}" alt="image1">
+            <div class="column" style="float: left; width: 50%; padding: 50px 10px 150px 10px;">
+                <h2 style="padding-bottom: 10px; text-align: center">Output image</h2>
+                <img style="width: 100%;" src="{{ color_img }}" alt="Generated Colored Image">
             </div>
 
         </div>
