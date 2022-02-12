@@ -4330,11 +4330,13 @@ textarea.form-control-lg {
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 }
+
+
 
 .navbar > .container,
 .navbar > .container-fluid,
@@ -11951,7 +11953,7 @@ body {
 
 
 .text-white-75 {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: rgba(255, 255, 255, 1) !important;
 }
 
 .btn-xl {
@@ -11965,9 +11967,9 @@ body {
 
 hr.divider {
     height: 0.2rem;
-    max-width: 3.25rem;
+    max-width: 4.75rem;
     margin: 1.5rem auto;
-    background-color: #f4623a;
+    background-color: white;
     opacity: 1;
 }
 
