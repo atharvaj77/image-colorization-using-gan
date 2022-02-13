@@ -1,13 +1,13 @@
-import os
+import base64
+import io
 
 import cv2
 import numpy as np
-from flask import Flask
-from flask import render_template, session, url_for, redirect
+from flask import Flask, request
+from flask import render_template, url_for, redirect
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from tensorflow.keras.models import load_model
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hackproofgan_csi2021'
@@ -18,10 +18,13 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
 # https://docs.opencv.org/3.4/de/d25/imgproc_color_conversions.html
-def prediction(grey_img_path, model, out_img_path, greyscale_path):
+def prediction(img_data, model):
+    np_arr = np.frombuffer(base64.b64decode(img_data), np.uint8)
+    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
     # Conversion of RGB to resized Greyscale
-    img_arr = cv2.imread(grey_img_path)
-    resized = cv2.resize(img_arr, (256, 256))
+    # img_arr = cv2.imread(img)
+    resized = cv2.resize(img, (256, 256))
     img_gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
 
     # Normalization
@@ -52,13 +55,18 @@ def prediction(grey_img_path, model, out_img_path, greyscale_path):
 
     final_gray_out = (img_gray * 127.5) + 127.5
 
-    # Writing Processed images to corresponding paths
-    cv2.imwrite(greyscale_path, final_gray_out)
-    cv2.imwrite(out_img_path, final_pred_rgb)
+    # cv2.imwrite('static/uploads/gray.png', final_gray_out)
+    # cv2.imwrite('static/uploads/output.png', final_pred_rgb)
+
+    # print(final_gray_out.shape)
+    # print(final_pred_rgb.shape)
+
+    return final_gray_out, final_pred_rgb
 
 
 UPLOAD_FOLDER = './upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+data = io.BytesIO()
 
 
 class UploadForm(FlaskForm):
@@ -72,52 +80,38 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload():
-    # Creating uploads folder if it doesn't exist
-    if not os.path.exists('static/uploads'):
-        os.makedirs('static/uploads')
+    if request.method == 'POST':
+        image = request.files['image']  # get file
 
-    # Clearing the uploads directory
-    if os.listdir('static/uploads'):
-        for f in os.listdir('static/uploads'):
-            os.remove('static/uploads/' + f)
+        image_b64 = base64.b64encode(image.read()).decode('utf-8')
+        return redirect(url_for('render_predict', image_b64=image_b64))
 
-    form = UploadForm()
-
-    if form.validate_on_submit():
-        # Checking if form data is NoneType
-        if form.file.data:
-            # Checking if the extension of the file is in ALLOWED_EXTENSIONS
-            if allowed_file(form.file.data.filename):
-                filename = secure_filename(form.file.data.filename)
-                form.file.data.save('static/uploads/' + filename)
-
-                session['image'] = form.file.data.filename
-
-                return redirect(url_for('render_predict'))
-
-            else:
-                return render_template('home.html', form=form, msg='File format not supported. Only jpeg, jpg and png '
-                                                                   'are '
-                                                                   'supported')
-        else:
-            return render_template('home.html', form=form, msg='Please select a file!')
-
-    return render_template('home.html', form=form)
+    return render_template('home.html')
 
 
 @app.route('/predict', methods=['GET', 'POST'])
 def render_predict():
     try:
-        img_path = 'static/uploads/' + session['image']
-        gray_path = 'static/uploads/gray.png'
-        output_path = 'static/uploads/output.png'
-        prediction(img_path, pred_model, output_path, gray_path)
 
-        return render_template('predict.html', image_path=gray_path, color_img=output_path, success=True)
+        gray, color = prediction(request.args.get('image_b64'), pred_model)
+
+        rval, in_gray = cv2.imencode(".png", gray)
+        gray_buf = io.BytesIO(in_gray)
+
+        rval, in_color = cv2.imencode(".png", color)
+        color_buf = io.BytesIO(in_color)
+
+        encoded_gray = base64.b64encode(gray_buf.getvalue()).decode('utf-8')
+        encoded_color = base64.b64encode(color_buf.getvalue()).decode('utf-8')
+
+        img_gray = f"data:image/jpeg;base64,{encoded_gray}"
+        img_color = f"data:image/jpeg;base64,{encoded_color}"
+
+        return render_template('predict.html', image_path=img_gray, color_img=img_color, success=True)
 
     except Exception as e:
         return render_template('predict.html', response=e)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
