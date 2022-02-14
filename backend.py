@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hackproofgan_csi2021'
 
-pred_model = load_model('./generator_20.h5')
+pred_model = load_model('/app/generator_20.h5')
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
