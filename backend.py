@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from flask import Flask, request
 from flask import render_template, url_for, redirect
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hackproofgan_csi2021'
