@@ -5,14 +5,12 @@ import cv2
 import numpy as np
 from flask import Flask, request
 from flask import render_template, url_for, redirect
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
 from tensorflow.keras.models import load_model
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hackproofgan_csi2021'
 
-pred_model = load_model('/app/generator_20.h5')
+pred_model = load_model('generator_20.h5')
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -67,10 +65,6 @@ def prediction(img_data, model):
 UPLOAD_FOLDER = './upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 data = io.BytesIO()
-
-
-class UploadForm(FlaskForm):
-    file = FileField()
 
 
 def allowed_file(filename):
