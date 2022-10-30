@@ -53,12 +53,6 @@ def prediction(img_data, model):
 
     final_gray_out = (img_gray * 127.5) + 127.5
 
-    # cv2.imwrite('static/uploads/gray.png', final_gray_out)
-    # cv2.imwrite('static/uploads/output.png', final_pred_rgb)
-
-    # print(final_gray_out.shape)
-    # print(final_pred_rgb.shape)
-
     return final_gray_out, final_pred_rgb
 
 
